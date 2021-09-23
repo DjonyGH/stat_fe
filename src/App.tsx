@@ -3,24 +3,29 @@ import { useDispatch } from 'react-redux'
 import './App.css'
 import { useTypedSelector } from './hooks/useTypedSelector'
 import { issuersActionCreator } from './store/reducers/issuers/action-creators'
+import { tradesActionCreator } from './store/reducers/trades/action-creators'
 import { TIssuer } from './store/reducers/issuers/types'
 import { Button, AutoComplete, Spin } from 'antd'
 
 const { Option } = AutoComplete
 
 const App: FC = () => {
-  const {
-    issuers,
-    selectedIssuer,
-    isLoading
-    // error
-  } = useTypedSelector((state) => state.issuersReducer)
+  const { isLoading } = useTypedSelector((state) => state.generalReducer)
+  const { issuers, selectedIssuer } = useTypedSelector((state) => state.issuersReducer)
+  const { trades } = useTypedSelector((state) => state.tradesReducer)
   const dispatch = useDispatch()
   console.log('selectedIssuer', selectedIssuer)
+  console.log('trades', trades)
 
   useEffect(() => {
     dispatch(issuersActionCreator.fetchIssuers())
   }, []) //eslint-disable-line
+
+  useEffect(() => {
+    if (selectedIssuer) {
+      dispatch(tradesActionCreator.fetchTrades(selectedIssuer.id))
+    }
+  }, [selectedIssuer]) //eslint-disable-line
 
   const handleClickBtn = () => {
     console.log('Click')

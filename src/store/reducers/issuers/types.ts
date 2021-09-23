@@ -6,15 +6,11 @@ export type TIssuer = {
 export interface IIssuersState {
   issuers: TIssuer[]
   selectedIssuer?: TIssuer
-  isLoading: boolean
-  error: string
 }
 
 export enum EIssuersAction {
   SET_ISSUERS = 'SET_ISSUERS',
-  SET_SELECTED_ISSUER = 'SET_SELECTED_ISSUER',
-  SET_IS_LOADING = 'SET_IS_LOADING',
-  SET_ERROR = 'SET_ERROR'
+  SET_SELECTED_ISSUER = 'SET_SELECTED_ISSUER'
 }
 
 export interface ISetIssuersAction {
@@ -27,14 +23,4 @@ export interface ISetSelectedIssuerAction {
   payload: TIssuer
 }
 
-export interface ISetIsLoadingAction {
-  type: EIssuersAction.SET_IS_LOADING
-  payload: boolean
-}
-
-export interface ISetErrorAction {
-  type: EIssuersAction.SET_ERROR
-  payload: string
-}
-
-export type TIssuersAction = ISetIssuersAction | ISetSelectedIssuerAction | ISetIsLoadingAction | ISetErrorAction
+export type TIssuersAction = ISetIssuersAction | ISetSelectedIssuerAction
