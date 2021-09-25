@@ -1,19 +1,35 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
+import { Switch, Route, Redirect, useHistory } from 'react-router-dom'
 import './App.css'
+import { useTypedSelector } from './hooks/useTypedSelector'
 
-import { Layout, Menu, Row } from 'antd'
+import { Layout, Menu, Row, Spin } from 'antd'
+import { ERoutes, publicRoutes } from './router'
 const { Header, Content, Footer } = Layout
 
 const App: FC = () => {
+  const { isLoading } = useTypedSelector((state) => state.generalReducer)
+  const router = useHistory()
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([router.location.pathname])
+
+  const handleClickMenuItem = (e: any) => {
+    setSelectedKeys(e.keyPath)
+    router.push(e.key)
+  }
+
   return (
     <Layout className="layout">
       <Header>
         <Row justify={'space-between'}>
           <div className="logo" />
-          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['0']}>
-            <Menu.Item key="0">Главная</Menu.Item>
-            <Menu.Item key="1">Акции РФ</Menu.Item>
-            <Menu.Item key="2" disabled>
+          <Menu theme="dark" mode="horizontal" selectedKeys={selectedKeys}>
+            <Menu.Item key={ERoutes.HEAD} onClick={handleClickMenuItem}>
+              Главная
+            </Menu.Item>
+            <Menu.Item key={ERoutes.RUSSIAN_STOCK} onClick={handleClickMenuItem}>
+              Акции РФ
+            </Menu.Item>
+            <Menu.Item key={ERoutes.USA_STOCK} onClick={handleClickMenuItem} disabled>
               Акции США
             </Menu.Item>
           </Menu>
@@ -21,7 +37,16 @@ const App: FC = () => {
         </Row>
       </Header>
       <Content style={{ padding: '0 50px' }}>
-        <div className="content">Content</div>
+        <Spin spinning={isLoading}>
+          <div className="content">
+            <Switch>
+              {publicRoutes.map((route) => (
+                <Route path={route.path} component={route.component} exact={route.exact} key={route.path} />
+              ))}
+              <Redirect to={ERoutes.NO_FOUND} />
+            </Switch>
+          </div>
+        </Spin>
       </Content>
       <Footer style={{ textAlign: 'center', height: '70px' }}>Created by Kalimullin Evgeniy @2021</Footer>
     </Layout>

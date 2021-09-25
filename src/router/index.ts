@@ -1,5 +1,6 @@
 import React from 'react'
 import HeadPage from '../pages/HeadPage'
+import NoFoundPage from '../pages/NoFoundPage'
 import RussianStockPage from '../pages/RussianStockPage'
 
 export interface IRoute {
@@ -9,7 +10,9 @@ export interface IRoute {
 }
 export enum ERoutes {
   HEAD = '/',
-  RUSSIAN_STOCK = '/russian-stock'
+  RUSSIAN_STOCK = '/russian-stock',
+  NO_FOUND = '/no-found',
+  USA_STOCK = '/usa-stock'
 }
 
 export const publicRoutes: IRoute[] = [
@@ -22,6 +25,10 @@ export const publicRoutes: IRoute[] = [
     path: ERoutes.RUSSIAN_STOCK,
     component: RussianStockPage,
     exact: true
+  },
+  {
+    path: ERoutes.NO_FOUND,
+    component: NoFoundPage
   }
 ]
 
