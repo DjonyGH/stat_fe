@@ -1,60 +1,30 @@
-import React, { FC, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { FC } from 'react'
 import './App.css'
-import { useTypedSelector } from './hooks/useTypedSelector'
-import { issuersActionCreator } from './store/reducers/issuers/action-creators'
-import { tradesActionCreator } from './store/reducers/trades/action-creators'
-import { TIssuer } from './store/reducers/issuers/types'
-import { Button, AutoComplete, Spin } from 'antd'
 
-const { Option } = AutoComplete
+import { Layout, Menu, Row } from 'antd'
+const { Header, Content, Footer } = Layout
 
 const App: FC = () => {
-  const { isLoading } = useTypedSelector((state) => state.generalReducer)
-  const { issuers, selectedIssuer } = useTypedSelector((state) => state.issuersReducer)
-  const { trades } = useTypedSelector((state) => state.tradesReducer)
-  const dispatch = useDispatch()
-  console.log('selectedIssuer', selectedIssuer)
-  console.log('trades', trades)
-
-  useEffect(() => {
-    dispatch(issuersActionCreator.fetchIssuers())
-  }, []) //eslint-disable-line
-
-  useEffect(() => {
-    if (selectedIssuer) {
-      dispatch(tradesActionCreator.fetchTrades(selectedIssuer.id))
-    }
-  }, [selectedIssuer]) //eslint-disable-line
-
-  const handleClickBtn = () => {
-    console.log('Click')
-  }
-
-  const selectIssuer = (value: string, option: any) =>
-    dispatch(issuersActionCreator.setSelectedIssuer({ id: option.key, name: value }))
-
   return (
-    <Spin spinning={isLoading}>
-      <div className="App">
-        <Button style={{ marginTop: 20 }} type="primary" onClick={handleClickBtn}>
-          Primary Button
-        </Button>
-        <AutoComplete
-          style={{ width: 200, marginTop: 20 }}
-          placeholder="Выберите..."
-          onSelect={selectIssuer}
-          filterOption={true}
-          defaultActiveFirstOption={true}
-        >
-          {issuers.map((issuer: TIssuer) => (
-            <Option key={issuer.id} value={issuer.name}>
-              {issuer.name}
-            </Option>
-          ))}
-        </AutoComplete>
-      </div>
-    </Spin>
+    <Layout className="layout">
+      <Header>
+        <Row justify={'space-between'}>
+          <div className="logo" />
+          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['0']}>
+            <Menu.Item key="0">Главная</Menu.Item>
+            <Menu.Item key="1">Акции РФ</Menu.Item>
+            <Menu.Item key="2" disabled>
+              Акции США
+            </Menu.Item>
+          </Menu>
+          <div className="login" />
+        </Row>
+      </Header>
+      <Content style={{ padding: '0 50px' }}>
+        <div className="content">Content</div>
+      </Content>
+      <Footer style={{ textAlign: 'center', height: '70px' }}>Created by Kalimullin Evgeniy @2021</Footer>
+    </Layout>
   )
 }
 
