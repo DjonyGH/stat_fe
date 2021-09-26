@@ -11,10 +11,12 @@ export type TTrade = {
 
 export interface ITradesState {
   trades: TTrade[]
+  lastTradeDate: string
 }
 
 export enum ETradesAction {
-  SET_TRADES = 'SET_TRADES'
+  SET_TRADES = 'SET_TRADES',
+  SET_LAST_TRADE_DATE = 'SET_LAST_TRADE_DATE'
 }
 
 export interface ISetTradesAction {
@@ -22,4 +24,9 @@ export interface ISetTradesAction {
   payload: TTrade[]
 }
 
-export type TTradesAction = ISetTradesAction
+export interface ISetLastTradeDateAction {
+  type: ETradesAction.SET_LAST_TRADE_DATE
+  payload: string
+}
+
+export type TTradesAction = ISetTradesAction | ISetLastTradeDateAction
