@@ -64,6 +64,13 @@ export const tradesActionCreator = {
         low: trade[7],
         volume: trade[5]
       }))
+      // const sortTrades = trades.sort((a, b) => {
+      //   if (b.volume > a.volume) return 1
+      //   if (b.volume < a.volume) return -1
+      //   return 0
+      // })
+      // console.log('>>>', sortTrades)
+
       dispatch(tradesActionCreator.setTradesAtLastTradeDate(trades))
     } catch (error) {
       dispatch(generalActionCreator.setError(String(error)))
