@@ -11,21 +11,35 @@ const { Option } = AutoComplete
 
 const RussianStockPage: FC = () => {
   const { issuers, selectedIssuer } = useTypedSelector((state) => state.issuersReducer)
-  const { trades } = useTypedSelector((state) => state.tradesReducer)
+  const { trades, lastTradeDate } = useTypedSelector((state) => state.tradesReducer)
   const dispatch = useDispatch()
-  console.log('selectedIssuer', selectedIssuer)
+  console.log('selectedIssuer', selectedIssuer, lastTradeDate)
   console.log('trades', trades)
-  console.log('>>>', defineRange(5))
+  // console.log('>>>', defineRange(5))
 
   useEffect(() => {
     dispatch(issuersActionCreator.fetchIssuers())
+    dispatch(tradesActionCreator.fetchLastTradeDate())
   }, []) //eslint-disable-line
 
   useEffect(() => {
-    if (selectedIssuer) {
-      dispatch(tradesActionCreator.fetchTrades(selectedIssuer.id))
+    if (selectedIssuer && lastTradeDate) {
+      dispatch(tradesActionCreator.fetchTrades(selectedIssuer.id, lastTradeDate))
     }
   }, [selectedIssuer]) //eslint-disable-line
+
+  useEffect(() => {
+    if (trades.length) {
+      const lastTrade = trades[trades.length - 1]
+      const changeLastPrice = ((lastTrade.close - lastTrade.open) / lastTrade.open) * 100
+      const lastTradeRange = defineRange(changeLastPrice)
+      // trades.map((trade, index) => {
+      //   const changePrice = (trade.close - trade.open) / trade.open * 100
+      //   if ()
+      // })
+      console.log('>>>', lastTradeRange)
+    }
+  }, [trades]) //eslint-disable-line
 
   const selectIssuer = (value: string, option: any) =>
     dispatch(issuersActionCreator.setSelectedIssuer({ id: option.key, name: value }))
