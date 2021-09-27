@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { Bar } from 'react-chartjs-2'
 import { TTrade } from '../store/reducers/trades/types'
+import { prepareDate } from '../utils/prepareDate'
 
 interface IProps {
   rawData: TTrade[]
@@ -55,7 +56,7 @@ const LeaderChart: FC<IProps> = ({ rawData, leadersOf, date }) => {
       },
       title: {
         display: true,
-        text: `Лидеры ${leadersOf === 'growth' ? 'роста' : 'падения'} (${date}), %`
+        text: `Лидеры ${leadersOf === 'growth' ? 'роста' : 'падения'} (${prepareDate(date)}), %`
       }
     }
   }
