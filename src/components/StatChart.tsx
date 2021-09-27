@@ -1,8 +1,7 @@
 import React, { FC } from 'react'
 import { Bar } from 'react-chartjs-2'
-import { TTrade } from '../store/reducers/trades/types'
 import { ranges } from '../utils/defineRange'
-import { prepareDate } from '../utils/prepareDate'
+// import { prepareDate } from '../utils/prepareDate'
 
 interface IProps {
   data: number[]
@@ -33,7 +32,7 @@ const StatChart: FC<IProps> = ({ data }) => {
       },
       title: {
         display: true,
-        text: `Статистика, %`
+        text: `Статистика следующих дней, %`
       }
     }
   }

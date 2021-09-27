@@ -7,6 +7,8 @@ import { TIssuer } from '../store/reducers/issuers/types'
 import { AutoComplete } from 'antd'
 import { defineRange } from '../utils/defineRange'
 import StatChart from '../components/StatChart'
+import { changePrice } from '../utils/changePrice'
+import { prepareDate } from '../utils/prepareDate'
 
 const { Option } = AutoComplete
 
@@ -31,21 +33,19 @@ const RussianStockPage: FC = () => {
   useEffect(() => {
     if (trades.length) {
       const lastTrade = trades[trades.length - 1]
-      const changeLastPrice = ((lastTrade.close - lastTrade.open) / lastTrade.open) * 100
+      const changeLastPrice = changePrice(lastTrade)
       const lastTradeRange = defineRange(changeLastPrice)
       const rowStat: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       trades.forEach((trade, index) => {
-        const changePrice = ((trade.close - trade.open) / trade.open) * 100
-        const tradeRange = defineRange(changePrice)
-        // console.log('>', index)
+        const changeCurrentPrice = changePrice(trade)
+        const tradeRange = defineRange(changeCurrentPrice)
 
         if (tradeRange === lastTradeRange && index < trades.length - 1) {
           const nextTrade = trades[index + 1]
-          const changeNextPrice = ((nextTrade.close - nextTrade.open) / nextTrade.open) * 100
+          const changeNextPrice = changePrice(nextTrade)
           const nextTradeRange = defineRange(changeNextPrice)
-          // console.log('>', stat[nextTradeRange])
+
           rowStat[nextTradeRange]++
-          // console.log('>>', stat[nextTradeRange])
         }
       })
       const sum = rowStat.reduce((acc, item) => acc + item, 0)
@@ -57,7 +57,7 @@ const RussianStockPage: FC = () => {
   const selectIssuer = (value: string, option: any) =>
     dispatch(issuersActionCreator.setSelectedIssuer({ id: option.key, name: value }))
 
-  console.log('>>>', stat)
+  // console.log('>>>', stat)
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -74,13 +74,13 @@ const RussianStockPage: FC = () => {
           </Option>
         ))}
       </AutoComplete>
-      {trades && (
+      {!!trades.length && (
         <div>
-          Дата: {lastTradeDate}, Открытие: {trades[trades.length - 1].open}, Закрытие: {trades[trades.length - 1].close}
-          , Изменение:
+          Дата: {prepareDate(lastTradeDate)}, Открытие: {trades[trades.length - 1].open}, Закрытие:{' '}
+          {trades[trades.length - 1].close}, Изменение: {changePrice(trades[trades.length - 1]).toFixed(2)}%
         </div>
       )}
-      {stat.length && <StatChart data={stat} />}
+      {!!stat.length && <StatChart data={stat} />}
     </div>
   )
 }
