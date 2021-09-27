@@ -14,7 +14,6 @@ const LeaderChart: FC<IProps> = ({ rawData, leadersOf, date }) => {
     labels: rawData.map((item) => item.name),
     datasets: [
       {
-        // label: null,
         // label: leadersOf === 'growth' ? 'Лидеры роста (16.10.2021), % 16.10.2021' : 'Лидеры падения, %',
         data: rawData.map((item) => Math.abs(((item.close - item.open) / item.open) * 100)),
         backgroundColor:

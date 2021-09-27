@@ -6,6 +6,7 @@ import { tradesActionCreator } from '../store/reducers/trades/action-creators'
 import { TIssuer } from '../store/reducers/issuers/types'
 import { AutoComplete } from 'antd'
 import { defineRange } from '../utils/defineRange'
+import StatChart from '../components/StatChart'
 
 const { Option } = AutoComplete
 
@@ -59,7 +60,7 @@ const RussianStockPage: FC = () => {
   console.log('>>>', stat)
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
       <AutoComplete
         style={{ width: 200, marginTop: 20 }}
         placeholder="Выберите..."
@@ -73,6 +74,13 @@ const RussianStockPage: FC = () => {
           </Option>
         ))}
       </AutoComplete>
+      {trades && (
+        <div>
+          Дата: {lastTradeDate}, Открытие: {trades[trades.length - 1].open}, Закрытие: {trades[trades.length - 1].close}
+          , Изменение:
+        </div>
+      )}
+      {stat.length && <StatChart data={stat} />}
     </div>
   )
 }
