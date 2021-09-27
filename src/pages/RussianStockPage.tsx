@@ -4,7 +4,8 @@ import { useTypedSelector } from '../hooks/useTypedSelector'
 import { issuersActionCreator } from '../store/reducers/issuers/action-creators'
 import { tradesActionCreator } from '../store/reducers/trades/action-creators'
 import { TIssuer } from '../store/reducers/issuers/types'
-import { Button, AutoComplete } from 'antd'
+import { AutoComplete } from 'antd'
+import { defineRange } from '../utils/defineRange'
 
 const { Option } = AutoComplete
 
@@ -14,6 +15,7 @@ const RussianStockPage: FC = () => {
   const dispatch = useDispatch()
   console.log('selectedIssuer', selectedIssuer)
   console.log('trades', trades)
+  console.log('>>>', defineRange(5))
 
   useEffect(() => {
     dispatch(issuersActionCreator.fetchIssuers())
@@ -25,18 +27,11 @@ const RussianStockPage: FC = () => {
     }
   }, [selectedIssuer]) //eslint-disable-line
 
-  const handleClickBtn = () => {
-    console.log('Click')
-  }
-
   const selectIssuer = (value: string, option: any) =>
     dispatch(issuersActionCreator.setSelectedIssuer({ id: option.key, name: value }))
 
   return (
     <div>
-      <Button style={{ marginTop: 20 }} type="primary" onClick={handleClickBtn}>
-        Primary Button
-      </Button>
       <AutoComplete
         style={{ width: 200, marginTop: 20 }}
         placeholder="Выберите..."
