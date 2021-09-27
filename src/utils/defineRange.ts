@@ -17,7 +17,7 @@ export const defineRange = (value: number) => {
   ]
   let rangeIndex: number = -1
   ranges.forEach((range, index) => {
-    if (value > range[0] && value < range[1]) {
+    if (value > range[0] && value <= range[1]) {
       rangeIndex = index
     }
   })

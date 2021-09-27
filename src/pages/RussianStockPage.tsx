@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { issuersActionCreator } from '../store/reducers/issuers/action-creators'
@@ -13,9 +13,8 @@ const RussianStockPage: FC = () => {
   const { issuers, selectedIssuer } = useTypedSelector((state) => state.issuersReducer)
   const { trades, lastTradeDate } = useTypedSelector((state) => state.tradesReducer)
   const dispatch = useDispatch()
-  console.log('selectedIssuer', selectedIssuer, lastTradeDate)
-  console.log('trades', trades)
-  // console.log('>>>', defineRange(5))
+
+  const [stat, setStat] = useState<number[]>([])
 
   useEffect(() => {
     dispatch(issuersActionCreator.fetchIssuers())
@@ -33,16 +32,31 @@ const RussianStockPage: FC = () => {
       const lastTrade = trades[trades.length - 1]
       const changeLastPrice = ((lastTrade.close - lastTrade.open) / lastTrade.open) * 100
       const lastTradeRange = defineRange(changeLastPrice)
-      // trades.map((trade, index) => {
-      //   const changePrice = (trade.close - trade.open) / trade.open * 100
-      //   if ()
-      // })
-      console.log('>>>', lastTradeRange)
+      const rowStat: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      trades.forEach((trade, index) => {
+        const changePrice = ((trade.close - trade.open) / trade.open) * 100
+        const tradeRange = defineRange(changePrice)
+        // console.log('>', index)
+
+        if (tradeRange === lastTradeRange && index < trades.length - 1) {
+          const nextTrade = trades[index + 1]
+          const changeNextPrice = ((nextTrade.close - nextTrade.open) / nextTrade.open) * 100
+          const nextTradeRange = defineRange(changeNextPrice)
+          // console.log('>', stat[nextTradeRange])
+          rowStat[nextTradeRange]++
+          // console.log('>>', stat[nextTradeRange])
+        }
+      })
+      const sum = rowStat.reduce((acc, item) => acc + item, 0)
+      const stat = rowStat.map((item) => +((item / sum) * 100).toFixed(1))
+      setStat(stat)
     }
   }, [trades]) //eslint-disable-line
 
   const selectIssuer = (value: string, option: any) =>
     dispatch(issuersActionCreator.setSelectedIssuer({ id: option.key, name: value }))
+
+  console.log('>>>', stat)
 
   return (
     <div>

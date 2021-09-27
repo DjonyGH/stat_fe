@@ -28,7 +28,7 @@ export const tradesActionCreator = {
 
       do {
         const response = await fetch(
-          `http://iss.moex.com/iss/history/engines/stock/markets/shares/boards/tqbr/securities/${issuerId}.json?from=2020-01-01&till=${endDate}&start=${start}`
+          `http://iss.moex.com/iss/history/engines/stock/markets/shares/boards/tqbr/securities/${issuerId}.json?from=2010-01-01&till=${endDate}&start=${start}`
         )
 
         const data = await response.json()
