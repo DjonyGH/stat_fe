@@ -1,5 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import styles from './headPage.module.css'
+import { Row } from 'antd'
 import LeaderChart from '../components/LeaderChart'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { tradesActionCreator } from '../store/reducers/trades/action-creators'
@@ -41,14 +43,14 @@ const HeadPage: FC = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div style={{ width: '48%', height: '500px' }}>
+      <Row justify={'space-between'}>
+        <div className={styles.chart}>
           {growthLeadres.length && <LeaderChart rawData={growthLeadres} leadersOf={'growth'} date={lastTradeDate} />}
         </div>
-        <div style={{ width: '48%', height: '500px' }}>
+        <div className={styles.chart}>
           {fallLeadres.length && <LeaderChart rawData={fallLeadres} leadersOf={'fall'} date={lastTradeDate} />}
         </div>
-      </div>
+      </Row>
     </div>
   )
 }

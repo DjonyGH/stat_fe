@@ -37,7 +37,7 @@ const StatChart: FC<IProps> = ({ data }) => {
     }
   }
 
-  return <Bar data={dataForBar} options={options} />
+  return <Bar data={dataForBar} options={options} height={70} />
 }
 
 export default StatChart

@@ -1,10 +1,11 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import styles from './russianStockPage.module.css'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { issuersActionCreator } from '../store/reducers/issuers/action-creators'
 import { tradesActionCreator } from '../store/reducers/trades/action-creators'
 import { TIssuer } from '../store/reducers/issuers/types'
-import { AutoComplete } from 'antd'
+import { AutoComplete, Row } from 'antd'
 import { defineRange } from '../utils/defineRange'
 import StatChart from '../components/StatChart'
 import { changePrice } from '../utils/changePrice'
@@ -60,27 +61,44 @@ const RussianStockPage: FC = () => {
   // console.log('>>>', stat)
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <AutoComplete
-        style={{ width: 200, marginTop: 20 }}
-        placeholder="Выберите..."
-        onSelect={selectIssuer}
-        filterOption={true}
-        defaultActiveFirstOption={true}
-      >
-        {issuers.map((issuer: TIssuer) => (
-          <Option key={issuer.id} value={issuer.name}>
-            {issuer.name}
-          </Option>
-        ))}
-      </AutoComplete>
-      {!!trades.length && (
-        <div>
-          Дата: {prepareDate(lastTradeDate)}, Открытие: {trades[trades.length - 1].open}, Закрытие:{' '}
-          {trades[trades.length - 1].close}, Изменение: {changePrice(trades[trades.length - 1]).toFixed(2)}%
-        </div>
-      )}
-      {!!stat.length && <StatChart data={stat} />}
+    <div className={styles.container}>
+      <Row justify={'start'}>
+        <AutoComplete
+          style={{ width: 200, marginTop: 20 }}
+          placeholder="Выберите..."
+          onSelect={selectIssuer}
+          filterOption={true}
+          defaultActiveFirstOption={true}
+        >
+          {issuers.map((issuer: TIssuer) => (
+            <Option key={issuer.id} value={issuer.name}>
+              {issuer.name}
+            </Option>
+          ))}
+        </AutoComplete>
+      </Row>
+      <Row justify={'start'}>
+        {!!trades.length && (
+          <div className={styles.info}>
+            <div>Дата: {prepareDate(lastTradeDate)}</div>
+            <div>Открытие: {trades[trades.length - 1].open}</div>
+            <div>Закрытие: {trades[trades.length - 1].close}</div>
+            <div>
+              Изменение:{' '}
+              <span style={changePrice(trades[trades.length - 1]) > 0 ? { color: 'green' } : { color: 'red' }}>
+                {changePrice(trades[trades.length - 1]).toFixed(2)}%
+              </span>
+            </div>
+          </div>
+        )}
+      </Row>
+      <Row justify={'space-between'}>
+        {!!stat.length && (
+          <div style={{ maxHeight: '500px', width: '100%' }}>
+            <StatChart data={stat} />
+          </div>
+        )}
+      </Row>
     </div>
   )
 }

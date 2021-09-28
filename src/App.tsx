@@ -36,7 +36,7 @@ const App: FC = () => {
           <div className="login" />
         </Row>
       </Header>
-      <Content style={{ padding: '0 50px' }}>
+      <Content>
         <Spin spinning={isLoading}>
           <div className="content">
             <Switch>
@@ -48,7 +48,9 @@ const App: FC = () => {
           </div>
         </Spin>
       </Content>
-      <Footer style={{ textAlign: 'center', height: '70px' }}>Created by Kalimullin Evgeniy @2021</Footer>
+      <Footer style={{ textAlign: 'center', height: '70px', background: 'lightgray' }}>
+        Created by Kalimullin Evgeniy @2021
+      </Footer>
     </Layout>
   )
 }
