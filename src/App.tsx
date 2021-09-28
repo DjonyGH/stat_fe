@@ -3,7 +3,7 @@ import { Switch, Route, Redirect, useHistory } from 'react-router-dom'
 import './App.css'
 import { useTypedSelector } from './hooks/useTypedSelector'
 
-import { Layout, Menu, Row, Spin } from 'antd'
+import { Button, Layout, Menu, Row, Spin } from 'antd'
 import { ERoutes, publicRoutes } from './router'
 const { Header, Content, Footer } = Layout
 
@@ -20,8 +20,8 @@ const App: FC = () => {
   return (
     <Layout className="layout">
       <Header>
-        <Row justify={'space-between'}>
-          <div className="logo" />
+        <Row justify={'space-between'} align={'middle'}>
+          <div className="logo">Logo</div>
           <Menu theme="dark" mode="horizontal" selectedKeys={selectedKeys}>
             <Menu.Item key={ERoutes.HEAD} onClick={handleClickMenuItem}>
               Главная
@@ -33,7 +33,9 @@ const App: FC = () => {
               Акции США
             </Menu.Item>
           </Menu>
-          <div className="login" />
+          <div className="login">
+            <Button type="primary">Войти</Button>
+          </div>
         </Row>
       </Header>
       <Content>

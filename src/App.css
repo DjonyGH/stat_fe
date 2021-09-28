@@ -11,3 +11,14 @@
   overflow-x: hidden;
   padding: 0 50px;
 }
+.logo {
+  width: 100px;
+  display: flex;
+  justify-content: flex-start;
+  color: white;
+}
+.login {
+  width: 100px;
+  display: flex;
+  justify-content: flex-end;
+}
