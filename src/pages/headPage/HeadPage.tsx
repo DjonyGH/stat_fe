@@ -2,10 +2,10 @@ import React, { FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import styles from './headPage.module.css'
 import { Row } from 'antd'
-import LeaderChart from '../components/LeaderChart'
-import { useTypedSelector } from '../hooks/useTypedSelector'
-import { tradesActionCreator } from '../store/reducers/trades/action-creators'
-import { TTrade } from '../store/reducers/trades/types'
+import LeaderChart from '../../components/LeaderChart'
+import { useTypedSelector } from '../../hooks/useTypedSelector'
+import { tradesActionCreator } from '../../store/reducers/trades/action-creators'
+import { TTrade } from '../../store/reducers/trades/types'
 
 const HeadPage: FC = () => {
   const { tradesAtLastTradeDate, lastTradeDate } = useTypedSelector((state) => state.tradesReducer)

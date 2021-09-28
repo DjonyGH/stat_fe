@@ -1,15 +1,15 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import styles from './russianStockPage.module.css'
-import { useTypedSelector } from '../hooks/useTypedSelector'
-import { issuersActionCreator } from '../store/reducers/issuers/action-creators'
-import { tradesActionCreator } from '../store/reducers/trades/action-creators'
-import { TIssuer } from '../store/reducers/issuers/types'
+import { useTypedSelector } from '../../hooks/useTypedSelector'
+import { issuersActionCreator } from '../../store/reducers/issuers/action-creators'
+import { tradesActionCreator } from '../../store/reducers/trades/action-creators'
+import { TIssuer } from '../../store/reducers/issuers/types'
 import { AutoComplete, Row } from 'antd'
-import { defineRange } from '../utils/defineRange'
-import StatChart from '../components/StatChart'
-import { changePrice } from '../utils/changePrice'
-import { prepareDate } from '../utils/prepareDate'
+import StatChart from '../../components/StatChart'
+import { defineRange } from '../../utils/defineRange'
+import { changePrice } from '../../utils/changePrice'
+import { prepareDate } from '../../utils/prepareDate'
 
 const { Option } = AutoComplete
 
@@ -57,8 +57,6 @@ const RussianStockPage: FC = () => {
 
   const selectIssuer = (value: string, option: any) =>
     dispatch(issuersActionCreator.setSelectedIssuer({ id: option.key, name: value }))
-
-  // console.log('>>>', stat)
 
   return (
     <div className={styles.container}>

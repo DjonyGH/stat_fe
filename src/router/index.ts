@@ -1,7 +1,7 @@
 import React from 'react'
-import HeadPage from '../pages/HeadPage'
-import NoFoundPage from '../pages/NoFoundPage'
-import RussianStockPage from '../pages/RussianStockPage'
+import HeadPage from '../pages/headPage/HeadPage'
+import NoFoundPage from '../pages/notFoundPage/NotFoundPage'
+import RussianStockPage from '../pages/russianStockPage/RussianStockPage'
 
 export interface IRoute {
   path: string
@@ -11,7 +11,7 @@ export interface IRoute {
 export enum ERoutes {
   HEAD = '/',
   RUSSIAN_STOCK = '/russian-stock',
-  NO_FOUND = '/no-found',
+  NOT_FOUND = '/not-found',
   USA_STOCK = '/usa-stock'
 }
 
@@ -27,7 +27,7 @@ export const publicRoutes: IRoute[] = [
     exact: true
   },
   {
-    path: ERoutes.NO_FOUND,
+    path: ERoutes.NOT_FOUND,
     component: NoFoundPage
   }
 ]

@@ -43,7 +43,7 @@ const App: FC = () => {
               {publicRoutes.map((route) => (
                 <Route path={route.path} component={route.component} exact={route.exact} key={route.path} />
               ))}
-              <Redirect to={ERoutes.NO_FOUND} />
+              <Redirect to={ERoutes.NOT_FOUND} />
             </Switch>
           </div>
         </Spin>
