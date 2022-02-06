@@ -32,6 +32,9 @@ const App: FC = () => {
             <Menu.Item key={ERoutes.USA_STOCK} onClick={handleClickMenuItem} disabled>
               Акции США
             </Menu.Item>
+            <Menu.Item key={ERoutes.PORTFOLIO} onClick={handleClickMenuItem}>
+              Портфель
+            </Menu.Item>
           </Menu>
           <div className="login">
             <Button type="primary">Войти</Button>
