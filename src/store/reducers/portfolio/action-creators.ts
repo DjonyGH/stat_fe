@@ -6,7 +6,11 @@ import {
   ISetEurPriceAction,
   ISetFxusPriceAction,
   ISetFxgdPriceAction,
-  ISetFxruPriceAction
+  ISetFxruPriceAction,
+  IMyTrade,
+  ISetMyTradesAction,
+  IMyAsset,
+  ISetMyAssetsAction
 } from './types'
 
 export const portfolioActionCreator = {
@@ -24,6 +28,14 @@ export const portfolioActionCreator = {
     type: EPortfolioAction.SET_FXRU_PRICE,
     payload: fxruPrice
   }),
+  setMyTrades: (myTrades: IMyTrade[]): ISetMyTradesAction => ({
+    type: EPortfolioAction.SET_MY_TRADES,
+    payload: myTrades
+  }),
+  setMyAssets: (myAssets: IMyAsset[]): ISetMyAssetsAction => ({
+    type: EPortfolioAction.SET_MY_ASSETS,
+    payload: myAssets
+  }),
 
   fetchCurrency: () => async (dispatch: TAppDispatch) => {
     try {
@@ -38,6 +50,66 @@ export const portfolioActionCreator = {
 
       dispatch(portfolioActionCreator.setUsdPrice(usdPrice))
       dispatch(portfolioActionCreator.setEurPrice(eurPrice))
+    } catch (error) {
+      dispatch(generalActionCreator.setError(String(error)))
+    } finally {
+      dispatch(generalActionCreator.setIsLoading(false))
+    }
+  },
+  fetchMyTrades: () => async (dispatch: TAppDispatch) => {
+    try {
+      dispatch(generalActionCreator.setIsLoading(true))
+
+      const response = await fetch(
+        `https://docs.google.com/spreadsheets/d/14WW2lqmXB60NRpVV4pTret9Eb-5tvelN5TmxpEGhMg0/gviz/tq`
+      )
+
+      const data = JSON.parse((await response.text()).substring(47).slice(0, -2))
+        .table.rows.filter((item: any, idx: number) => idx !== 0)
+        .map((item: any) => item.c)
+
+      const myTrades: IMyTrade[] = data.map((item: any) => ({
+        id: item[0].v,
+        date: item[1].v,
+        type: item[2].v,
+        ticker: item[3].v,
+        name: item[4].v,
+        price: +item[5].v,
+        count: +item[6].v
+      }))
+
+      const myAssets: IMyAsset[] = myTrades
+        .reduce((acc: IMyAsset[], trade: IMyTrade) => {
+          if (!acc.some((item) => item.ticker === trade.ticker)) {
+            acc.push({
+              ticker: trade.ticker,
+              name: trade.name,
+              averagePrice: trade.price * trade.count,
+              count: trade.count
+            })
+          } else {
+            const asset = acc.find((item) => item.ticker === trade.ticker)
+            if (trade.type === 'buy') {
+              asset && (asset.averagePrice = asset.averagePrice + trade.price * trade.count)
+              asset && (asset.count = asset.count + trade.count)
+            } else {
+              if (asset?.count === trade.count) {
+                acc = acc.filter((item) => item.ticker !== asset.ticker)
+              } else {
+                asset && (asset.averagePrice = asset.averagePrice - (asset.averagePrice / asset.count) * trade.count)
+                asset && (asset.count = asset.count - trade.count)
+              }
+            }
+          }
+          return acc
+        }, [] as IMyAsset[])
+        .map((asset: IMyAsset) => ({
+          ...asset,
+          averagePrice: asset.averagePrice / asset.count
+        }))
+
+      dispatch(portfolioActionCreator.setMyTrades(myTrades))
+      dispatch(portfolioActionCreator.setMyAssets(myAssets))
     } catch (error) {
       dispatch(generalActionCreator.setError(String(error)))
     } finally {

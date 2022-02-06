@@ -11,6 +11,7 @@ const PortfolioPage: FC = () => {
 
   useEffect(() => {
     dispatch(portfolioActionCreator.fetchCurrency())
+    dispatch(portfolioActionCreator.fetchMyTrades())
   }, []) //eslint-disable-line
 
   return (

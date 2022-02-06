@@ -5,7 +5,9 @@ const initialState: IPortfolioState = {
   eurPrice: '',
   fxusPrice: '',
   fxgdPrice: '',
-  fxruPrice: ''
+  fxruPrice: '',
+  myTrades: [],
+  myAssets: []
 }
 
 export default function portfolioReducer(state = initialState, action: TPortfolioAction): IPortfolioState {
@@ -20,6 +22,10 @@ export default function portfolioReducer(state = initialState, action: TPortfoli
       return { ...state, fxgdPrice: action.payload }
     case EPortfolioAction.SET_FXRU_PRICE:
       return { ...state, fxruPrice: action.payload }
+    case EPortfolioAction.SET_MY_TRADES:
+      return { ...state, myTrades: action.payload }
+    case EPortfolioAction.SET_MY_ASSETS:
+      return { ...state, myAssets: action.payload }
     default:
       return state
   }

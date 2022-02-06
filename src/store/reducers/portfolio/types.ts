@@ -1,9 +1,28 @@
+export interface IMyTrade {
+  id: string
+  date: string
+  type: 'buy' | 'sale'
+  ticker: string
+  name: string
+  price: number
+  count: number
+}
+
+export interface IMyAsset {
+  ticker: string
+  name: string
+  averagePrice: number
+  count: number
+}
+
 export interface IPortfolioState {
   usdPrice: string
   eurPrice: string
   fxusPrice: string
   fxgdPrice: string
   fxruPrice: string
+  myTrades: IMyTrade[]
+  myAssets: IMyAsset[]
 }
 
 export enum EPortfolioAction {
@@ -11,7 +30,9 @@ export enum EPortfolioAction {
   SET_EUR_PRICE = 'SET_EUR_PRICE',
   SET_FXUS_PRICE = 'SET_FXUS_PRICE',
   SET_FXGD_PRICE = 'SET_FXGD_PRICE',
-  SET_FXRU_PRICE = 'SET_FXRU_PRICE'
+  SET_FXRU_PRICE = 'SET_FXRU_PRICE',
+  SET_MY_TRADES = 'SET_MY_TRADES',
+  SET_MY_ASSETS = 'SET_MY_ASSETS'
 }
 
 export interface ISetUsdPriceAction {
@@ -39,9 +60,21 @@ export interface ISetFxruPriceAction {
   payload: string
 }
 
+export interface ISetMyTradesAction {
+  type: EPortfolioAction.SET_MY_TRADES
+  payload: IMyTrade[]
+}
+
+export interface ISetMyAssetsAction {
+  type: EPortfolioAction.SET_MY_ASSETS
+  payload: IMyAsset[]
+}
+
 export type TPortfolioAction =
   | ISetUsdPriceAction
   | ISetEurPriceAction
   | ISetFxusPriceAction
   | ISetFxgdPriceAction
   | ISetFxruPriceAction
+  | ISetMyTradesAction
+  | ISetMyAssetsAction
