@@ -37,6 +37,58 @@ export const portfolioActionCreator = {
     payload: myAssets
   }),
 
+  fetchFXUS: () => async (dispatch: TAppDispatch) => {
+    try {
+      dispatch(generalActionCreator.setIsLoading(true))
+
+      const response = await fetch(`https://iss.moex.com/iss/engines/stock/markets/shares/securities/FXUS/trades.json`)
+
+      const data = await response.json()
+
+      const fxusPrice: string = `${data.trades.data[data.trades.data.length - 1][4]}`
+
+      dispatch(portfolioActionCreator.setFxusPrice(fxusPrice))
+    } catch (error) {
+      dispatch(generalActionCreator.setError(String(error)))
+    } finally {
+      dispatch(generalActionCreator.setIsLoading(false))
+    }
+  },
+  fetchFXGD: () => async (dispatch: TAppDispatch) => {
+    try {
+      dispatch(generalActionCreator.setIsLoading(true))
+
+      const response = await fetch(`https://iss.moex.com/iss/engines/stock/markets/shares/securities/FXGD/trades.json`)
+
+      const data = await response.json()
+
+      const fxgdPrice: string = `${data.trades.data[data.trades.data.length - 1][4]}`
+
+      dispatch(portfolioActionCreator.setFxgdPrice(fxgdPrice))
+    } catch (error) {
+      dispatch(generalActionCreator.setError(String(error)))
+    } finally {
+      dispatch(generalActionCreator.setIsLoading(false))
+    }
+  },
+  fetchFXRU: () => async (dispatch: TAppDispatch) => {
+    try {
+      dispatch(generalActionCreator.setIsLoading(true))
+
+      const response = await fetch(`https://iss.moex.com/iss/engines/stock/markets/shares/securities/FXRU/trades.json`)
+
+      const data = await response.json()
+
+      const fxruPrice: string = `${data.trades.data[data.trades.data.length - 1][4]}`
+
+      dispatch(portfolioActionCreator.setFxruPrice(fxruPrice))
+    } catch (error) {
+      dispatch(generalActionCreator.setError(String(error)))
+    } finally {
+      dispatch(generalActionCreator.setIsLoading(false))
+    }
+  },
+
   fetchCurrency: () => async (dispatch: TAppDispatch) => {
     try {
       dispatch(generalActionCreator.setIsLoading(true))

@@ -2,17 +2,20 @@ export interface IMyTrade {
   id: string
   date: string
   type: 'buy' | 'sale'
-  ticker: string
+  ticker: 'FXUS' | 'FXGD' | 'FXRU'
   name: string
   price: number
   count: number
 }
 
 export interface IMyAsset {
-  ticker: string
+  ticker: 'FXUS' | 'FXGD' | 'FXRU'
   name: string
   averagePrice: number
   count: number
+  key?: string
+  myTotal?: string
+  currentTotal?: string
 }
 
 export interface IPortfolioState {
