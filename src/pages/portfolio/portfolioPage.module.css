@@ -16,3 +16,9 @@
 .currency > div {
   margin-right: 10px;
 }
+.green {
+  color: green;
+}
+.red {
+  color: red;
+}

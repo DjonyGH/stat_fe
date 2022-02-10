@@ -16,6 +16,10 @@ export interface IMyAsset {
   key?: string
   myTotal?: string
   currentTotal?: string
+  allocation?: string
+  target?: string
+  deviation?: string
+  action?: 'buy' | 'sell' | 'BUY' | 'SELL'
 }
 
 export interface IPortfolioState {

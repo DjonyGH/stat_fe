@@ -12,6 +12,7 @@ const PortfolioPage: FC = () => {
   )
   const dispatch = useDispatch()
   const [dataSource, setDataSource] = useState<IMyAsset[]>([])
+  const [total, setTotal] = useState<number>(0)
 
   useEffect(() => {
     dispatch(portfolioActionCreator.fetchCurrency())
@@ -21,24 +22,54 @@ const PortfolioPage: FC = () => {
     dispatch(portfolioActionCreator.fetchMyTrades())
   }, []) //eslint-disable-line
 
+  const cash = 552 + 2521
+
   const ETFsPrices = {
     FXUS: fxusPrice || '',
     FXGD: fxgdPrice || '',
     FXRU: fxruPrice || ''
   }
 
+  const target = {
+    FXUS: 65,
+    FXGD: 15,
+    FXRU: 20
+  }
+
   useEffect(() => {
-    const dataSource = myAssets.map((asset) => ({
-      ...asset,
-      key: asset.ticker,
-      averagePrice: +asset.averagePrice.toFixed(2),
-      myTotal: `${asset.averagePrice * asset.count}`,
-      currentPrice: ETFsPrices[asset.ticker],
-      currentTotal: `${(+ETFsPrices[asset.ticker] * asset.count).toFixed(0)}`,
-      allocation: `${(((+ETFsPrices[asset.ticker] * asset.count) / total) * 100).toFixed(1)}`
-    }))
-    setDataSource(dataSource)
-  }, [myAssets]) //eslint-disable-line
+    if (myAssets.length && fxusPrice && fxgdPrice && fxruPrice) {
+      let data = myAssets.map((asset) => ({
+        ...asset,
+        key: asset.ticker,
+        averagePrice: +asset.averagePrice.toFixed(2),
+        myTotal: `${asset.averagePrice * asset.count}`,
+        currentPrice: ETFsPrices[asset.ticker],
+        currentTotal: `${(+ETFsPrices[asset.ticker] * asset.count).toFixed(0)}`,
+        profit: `${((+ETFsPrices[asset.ticker] - +asset.averagePrice) * asset.count).toFixed(0)}`
+      }))
+
+      const total: number =
+        data.reduce((acc: number, item: IMyAsset) => {
+          return (acc = acc + +item.currentTotal!)
+        }, 0) + cash
+
+      data = data.map((asset) => ({
+        ...asset,
+        allocation: `${(((+ETFsPrices[asset.ticker] * asset.count) / total) * 100).toFixed(1)}`,
+        target: `${target[asset.ticker]}`,
+        deviation: `${(((+ETFsPrices[asset.ticker] * asset.count) / total) * 100 - target[asset.ticker]).toFixed(1)}`
+      }))
+
+      data = data.sort((a, b) => +a.deviation! - +b.deviation!)
+      data[0].action = 'BUY'
+      data[1].action = +data[1].deviation! > 0 ? 'sell' : 'buy'
+      data[2].action = 'SELL'
+      data = data.sort((a, b) => +b.target! - +a.target!)
+
+      setDataSource(data)
+      setTotal(total)
+    }
+  }, [myAssets, fxusPrice, fxgdPrice, fxruPrice]) //eslint-disable-line
 
   const columns = [
     {
@@ -77,19 +108,37 @@ const PortfolioPage: FC = () => {
       key: 'currentTotal'
     },
     {
+      title: 'Profit, RUB',
+      dataIndex: 'profit',
+      key: 'profit',
+      render: (value: string) => {
+        return <div className={`${+value > 0 ? styles.green : styles.red}`}>{value}</div>
+      }
+    },
+    {
       title: 'Allocation, %',
       dataIndex: 'allocation',
       key: 'allocation'
+    },
+    {
+      title: 'Target, %',
+      dataIndex: 'target',
+      key: 'target'
+    },
+    {
+      title: 'Deviation, %',
+      dataIndex: 'deviation',
+      key: 'deviation'
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      key: 'action',
+      render: (value: string) => {
+        return <div className={`${value.toLowerCase() === 'buy' ? styles.green : styles.red}`}>{value}</div>
+      }
     }
   ]
-
-  const cash = 552 + 2521
-  const total =
-    dataSource.reduce((acc: number, item: IMyAsset) => {
-      return (acc = acc + +item.currentTotal!)
-    }, 0) + cash
-
-  // console.log('fxusPrice', fxusPrice)
 
   return (
     <div className={styles.container}>
